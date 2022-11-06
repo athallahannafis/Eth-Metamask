@@ -2,11 +2,20 @@ import React, {} from "react";
 
 
 export default class EthereumPage extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            metamaskExists: false,
+        }
+    }
     handleConnect =() => {
         console.log("CLICKED");
     }
     componentDidMount = () => {
-        
+        console.log(!window.ethereum);
+        if (!window.ethereum) {
+            throw new Error("No metamask");
+        }
     }
     render() {
         return(
