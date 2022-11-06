@@ -1,7 +1,12 @@
 import logo from './logo.svg';
+import React from "react";
 import './App.css';
+import { Router, Routes, Route, BrowserRouter } from "react-router-dom";
 
-function App() {
+/// Pages
+import EthereumPage from "./pages/ethereum";
+
+function AppPage() {
   return (
     <div className="App">
       <header className="App-header">
@@ -19,6 +24,17 @@ function App() {
         </a>
       </header>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<EthereumPage/>}/>
+        <Route path="/ethereum" element={<EthereumPage/>}/>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
