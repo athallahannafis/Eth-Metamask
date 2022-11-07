@@ -1,5 +1,6 @@
 import React, {} from "react";
 import { ethers } from "ethers";
+import { ReactSession } from 'react-client-session';
 
 
 export default class EthereumPage extends React.Component {
@@ -9,7 +10,7 @@ export default class EthereumPage extends React.Component {
             metamaskExists: false,
             connectMeta: false,
             account: "",
-            balance: "Loading...",
+            balancee: "Loading...",
             transferAddress: "",
             transferAmount: 0,
         }
@@ -27,24 +28,30 @@ export default class EthereumPage extends React.Component {
     }
     /** End of input handlers */    
     fetchAccount = async() => {
+        /// Get account
         var response = await window.ethereum.request({method: "eth_requestAccounts"});
         console.log(response);
-        this.setState({connectMeta: true, account: response[0]});
-
-        
+        this.setState({});
         var account = response[0];
+        localStorage.setItem("userAddress", account);
+        
         /// Returns hex code balance
         var balanceResponse = await window.ethereum.request({
             method:'eth_getBalance', 
             params: [account, 'latest']
         });
         console.log(ethers.utils.formatEther(balanceResponse));
-        this.setState({balance: ethers.utils.formatEther(balanceResponse)});
-       
+        var ethBalance = ethers.utils.formatEther(balanceResponse);
+        this.setState({});
+        
+        localStorage.setItem("balance", ethBalance);
     }
     sendEth = async() => {
+        /**
+         * Send eth currency from CURRENTLY ACTIVE ACCOUNT in metamask extension
+         */
         try {
-
+            this.refresh();
             var provider = new ethers.providers.Web3Provider(window.ethereum);
             console.log("Provider: " + provider);
             
@@ -62,39 +69,62 @@ export default class EthereumPage extends React.Component {
             });
             console.log(response);
             this.refresh();
+            
         } catch(e) {
-            console.log(e);
+            alert(e);
         }
         
+    }
+    refreshBalance = async() => {
+        var balanceResponse = await window.ethereum.request({
+            method:'eth_getBalance', 
+            params: [localStorage.getItem("userAddress"), 'latest']
+        });
+        this.setState({});
+
+        localStorage.setItem("balance", ethers.utils.formatEther(balanceResponse));
+    }
+    refreshAccount = async() => {
+        /// Get account
+        var response = await window.ethereum.request({method: "eth_requestAccounts"});
+        console.log(response);
+        this.setState({});
+        var account = response[0];
+        localStorage.setItem("userAddress", account);
     }
     refresh = () => {
         this.fetchAccount();
     }
     handleConnect = async() => {
-        console.log("CLICKED");
          /**
          * !window.ethereum == false -> metamask exists
          * otherwise -> metamask doesn't exist
          */
           console.log(!window.ethereum);
           var ethFlag = !window.ethereum;
-          var account;
-          if (ethFlag == false) {
+          if (ethFlag === false) {
             this.fetchAccount();
           }
+    }
+
+    clearLocalStorage = () => {
+        localStorage.clear("userAddress");
+        localStorage.clear("balance");
+        window.location.reload();
+        
     }
 
 
 
     componentDidMount = () => {
-       
+        // this.clearLocalStorage();
     }
     render() {
         return(
-            this.state.connectMeta == false ?
+            localStorage.getItem("userAddress") == null ?
             <div className="flex flex-col items-center">
                 <div className="mt-40"/>
-                <div className="container w-96 p-2 rounded-md bg-gray-100 flex flex-col items-center">
+                <div className="w-96 p-2 rounded-md bg-gray-100 flex flex-col items-center">
                     <p>Connect metamask account</p>
                     <div className="mt-5"/>
                     <button className="bg-cyan-300 pl-5 pr-5 rounded-full" onClick={this.handleConnect} >
@@ -102,34 +132,54 @@ export default class EthereumPage extends React.Component {
                     </button>
                 </div>
             </div> : 
-             <div className="flex flex-col items-center md:max-w-2xl">
+             <div className="flex flex-col items-center ">
                 <div className="mt-40"/>
-                <div className="container w-96 p-2 rounded-md bg-gray-100 flex flex-col items-center">
-                    <p>Metamask Account:</p>
-                    <p>{this.state.account}</p>
-                    <div className="mt-5"/>
-                    <p>Balance:</p>
-                    <p>{this.state.balance}</p>
-                    <div className="mt-5"/>
-                    
-                    <div className="mt-10"/>
-                    <p>Send ETH Payment</p>
+                <div className="w-1/2 p-10 rounded-md bg-gray-100 flex flex-col items-center">
                     <div>
-                        <p>Account address:</p>
-                        <input type="text" placeholder="Address" value={this.state.transferAddress} onChange={this.transferAddressHandler} className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-                        focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
-                        "/>
+                        <p>Metamask Account:</p>
+                        <p>{localStorage.getItem("userAddress")}</p>
+                        <div className="mt-5"/>
+                        <p>Balance:</p>
+                        <p>{localStorage.getItem("balance")}</p>
                         <div className="mt-5"/>
 
-                        <p>Transfer Amount:</p>
-                        <input type="text" placeholder="0" value={this.state.transferAmount} onChange={this.transferAmountHandler} className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-                        focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
-                        "/>
+                        <div className="flex flex-row justify-center">
+                            <button className="bg-sky-700 px-5 py-2 rounded-full" onClick={this.clearLocalStorage} >
+                                <p className="text-white font-bold">Disconnect account</p>
+                            </button>
+                            <div className="w-10"/>
+                            <button className="bg-sky-700 px-5 py-2 rounded-full" onClick={this.fetchAccount} >
+                                <p className="text-white font-bold">Refresh</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="mt-10"/>
+                    <div class="border-t-4 border-grey-700 w-full flex flex-col items-center">
                         <div className="mt-5"/>
-                        
-                        <button className="bg-cyan-300 pl-5 pr-5 rounded-full" onClick={this.sendEth} >
-                            Send
+                        <p className="font-bold">Send ETH Payment</p>
+                    </div>
+                    <div className="mt-5"/>
+
+                    <div className="flex flex-col items-center">
+                        <div>
+                            <p>Account address:</p>
+                            <input type="text" placeholder="Address" value={this.state.transferAddress} onChange={this.transferAddressHandler} className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+                            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
+                            "/>
+                            <div className="mt-5"/>
+
+                            <p>Transfer Amount:</p>
+                            <input type="text" placeholder="0" value={this.state.transferAmount} onChange={this.transferAmountHandler} className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+                            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
+                            "/>
+                            <div className="mt-5"/>
+                        </div>
+
+                        <button className="bg-sky-700 px-5 py-2 hover:bg-green-700 rounded-full" onClick={this.sendEth} >
+                            <p className="text-white font-bold">Send</p>
                         </button>
+
                     </div>
                 </div>
             </div>
