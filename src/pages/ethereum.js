@@ -12,7 +12,7 @@ export default class EthereumPage extends React.Component {
             account: "",
             balancee: "Loading...",
             transferAddress: "",
-            transferAmount: 0,
+            transferAmount: null,
         }
 
         /// Input binders
@@ -169,13 +169,13 @@ export default class EthereumPage extends React.Component {
                     <div className="flex flex-col items-center">
                         <div>
                             <p>Account address:</p>
-                            <input type="text" placeholder="Address" value={this.state.transferAddress} onChange={this.transferAddressHandler} className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+                            <input type="text" placeholder="0x526ef..." value={this.state.transferAddress} onChange={this.transferAddressHandler} className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
                             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
                             "/>
                             <div className="mt-5"/>
 
                             <p>Transfer Amount:</p>
-                            <input type="text" placeholder="0" value={this.state.transferAmount} onChange={this.transferAmountHandler} className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+                            <input type="text" placeholder="0.0001" value={this.state.transferAmount} onChange={this.transferAmountHandler} className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
                             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
                             "/>
                             <div className="mt-5"/>
