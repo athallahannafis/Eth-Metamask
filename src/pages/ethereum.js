@@ -136,10 +136,11 @@ export default class EthereumPage extends React.Component {
                 <div className="mt-40"/>
                 <div className="w-1/2 p-10 rounded-md bg-gray-100 flex flex-col items-center">
                     <div>
-                        <p>Metamask Account:</p>
+                        <p className="font-bold">Metamask Account</p>
+                        <p className="font-bold">(Currently active and connected from extension):</p>
                         <p>{localStorage.getItem("userAddress")}</p>
                         <div className="mt-5"/>
-                        <p>Balance:</p>
+                        <p className="font-bold">Balance:</p>
                         <p>{localStorage.getItem("balance")}</p>
                         <div className="mt-5"/>
 
