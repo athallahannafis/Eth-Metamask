@@ -28,6 +28,15 @@ export default class EthereumPage extends React.Component {
     }
     /** End of input handlers */    
     fetchAccount = async() => {
+        /**
+         * References:
+         * https://www.geeksforgeeks.org/how-to-connect-reactjs-with-metamask/
+         * https://www.youtube.com/watch?v=QJZUItAsdfg
+         * 
+         * Docs:
+         * https://docs.metamask.io/guide/ethereum-provider.html
+         */
+
         /// Get account
         var response = await window.ethereum.request({method: "eth_requestAccounts"});
         console.log(response);
