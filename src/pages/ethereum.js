@@ -104,6 +104,8 @@ export default class EthereumPage extends React.Component {
           var ethFlag = !window.ethereum;
           if (ethFlag === false) {
             this.fetchAccount();
+          } else{
+            alert("Install Metamask extension first");
           }
     }
 
@@ -127,8 +129,10 @@ export default class EthereumPage extends React.Component {
                 <div className="w-96 p-2 rounded-md bg-gray-100 flex flex-col items-center">
                     <p>Connect metamask account</p>
                     <div className="mt-5"/>
-                    <button className="bg-cyan-300 pl-5 pr-5 rounded-full" onClick={this.handleConnect} >
-                        Connect
+                    <button className="bg-sky-700 hover:bg-cyan-700 px-5 py-2 rounded-full" onClick={this.handleConnect} >
+                        <p className="text-white font-bold">
+                            Connect
+                        </p>
                     </button>
                 </div>
             </div> : 
