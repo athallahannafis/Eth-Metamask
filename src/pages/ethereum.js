@@ -144,11 +144,11 @@ export default class EthereumPage extends React.Component {
                         <div className="mt-5"/>
 
                         <div className="flex flex-row justify-center">
-                            <button className="bg-sky-700 px-5 py-2 rounded-full" onClick={this.clearLocalStorage} >
+                            <button className="bg-sky-700 hover:bg-red-700 px-5 py-2 rounded-full" onClick={this.clearLocalStorage} >
                                 <p className="text-white font-bold">Disconnect account</p>
                             </button>
                             <div className="w-10"/>
-                            <button className="bg-sky-700 px-5 py-2 rounded-full" onClick={this.fetchAccount} >
+                            <button className="bg-sky-700 hover:bg-cyan-700 px-5 py-2 rounded-full" onClick={this.fetchAccount} >
                                 <p className="text-white font-bold">Refresh</p>
                             </button>
                         </div>
